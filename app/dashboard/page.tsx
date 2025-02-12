@@ -50,9 +50,13 @@ function GenerateDescription() {
       formData.append("features", features);
 
       const response = await axios.post(
-        "https://3.83.215.54/api/generate-description/user123",
+        "http://3.83.215.54/api/generate-description/user123",
         formData
       );
+      // const response = await axios.get(
+      //   "http://3.83.215.54/api/stats/user123"
+      // );
+      console.log(response.data);
 
       // Ensure the response is a string
       const description = response.data.description;
