@@ -137,7 +137,7 @@ export function Sidebar() {
               <Button variant="ghost" className="w-full justify-start" onClick={() => router.push("/dashboard")}>
                   Description Generator
                 </Button>
-                <Button variant="ghost" className="w-full justify-start" onClick={() => router.push("/stats/user123")}>
+                <Button variant="ghost" className="w-full justify-start" onClick={() => router.push("/stats")}>
                   Stats
                 </Button>
                 <Button variant="ghost" className="w-full justify-start">

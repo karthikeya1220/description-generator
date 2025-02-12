@@ -1,9 +1,13 @@
-{
-    "rewrites": [
-      {
-        "source": "/api/generate-description/:path*",
-        "destination": "http://3.83.215.54/api/generate-description/:path*"
-      }
-    ]
-  }
-  
+    {
+        "rewrites": [
+        {
+            "source": "/api/generate-description/:path*",
+            "destination": "http://3.83.215.54/api/generate-description/:path*"
+        },
+        {
+            "source": "/api/stats/:path*",
+            "destination": "http://3.83.215.54/api/stats/:path*"
+        }
+        ]
+    }
+    
