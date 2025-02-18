@@ -173,7 +173,7 @@ function GenerateDescription() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid  gap-4">
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
                   Tone of Voice
@@ -191,20 +191,7 @@ function GenerateDescription() {
                 </select>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Paragraphs
-                </label>
-                <select
-                  value={paragraphs}
-                  onChange={(e) => setParagraphs(e.target.value)}
-                  className="w-full px-4 py-2 border border-input bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                >
-                  <option value="1">1 Paragraph</option>
-                  <option value="2">2 Paragraphs</option>
-                  <option value="3">3 Paragraphs</option>
-                </select>
-              </div>
+              
             </div>
 
             <div>
