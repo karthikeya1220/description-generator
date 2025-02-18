@@ -5,6 +5,13 @@ import axios from "axios";
 import { useTheme } from "next-themes";
 import { useFont } from "@/contexts/FontContext";
 
+// First, update the interface to match the response structure
+interface DescriptionResponse {
+  title: string;
+  short_description: string;
+  content: string;
+}
+
 function GenerateDescription() {
   const { theme } = useTheme();
   const { font } = useFont();
@@ -16,6 +23,7 @@ function GenerateDescription() {
   const [generatedDescription, setGeneratedDescription] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [descriptionData, setDescriptionData] = useState<DescriptionResponse | null>(null);
 
   // Handle Image Upload
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,28 +58,30 @@ function GenerateDescription() {
       formData.append("features", features);
 
       const response = await axios.post(
-        "/api/generate-description/user123",
+        "http://localhost:3001/api/generate-description/user123",
         formData
       );
-      // const response = await axios.get(
-      //   "http://3.83.215.54/api/stats/user123"
-      // );
-      console.log(response.data);
 
-      // Ensure the response is a string
-      const description = response.data.description;
+      // Parse the response data
+      const responseData = typeof response.data === 'string' 
+        ? JSON.parse(response.data) 
+        : response.data;
 
-      if (description && description.parts && description.parts.length > 0) {
-        setGeneratedDescription(description.parts[0].text);
+      if (responseData && responseData.title) {
+        setDescriptionData(responseData);
+        // Format the text for copy/export functionality
+        setGeneratedDescription(
+          `Title:\n${responseData.title}\n\nShort Description:\n${responseData.short_description}\n\nContent:\n${responseData.content}`
+        );
       } else {
-        console.error("No parts in the description");
-        setGeneratedDescription("Error: No description parts found.");
+        console.error("Invalid response format");
+        setDescriptionData(null);
+        setGeneratedDescription("Error: Invalid response format.");
       }
     } catch (error) {
       console.error("Error generating description:", error);
-      setGeneratedDescription(
-        "Error generating description. Please try again."
-      );
+      setDescriptionData(null);
+      setGeneratedDescription("Error generating description. Please try again.");
     } finally {
       setIsGenerating(false);
     }
@@ -163,7 +173,7 @@ function GenerateDescription() {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid  gap-4">
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
                   Tone of Voice
@@ -181,20 +191,7 @@ function GenerateDescription() {
                 </select>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  Paragraphs
-                </label>
-                <select
-                  value={paragraphs}
-                  onChange={(e) => setParagraphs(e.target.value)}
-                  className="w-full px-4 py-2 border border-input bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                >
-                  <option value="1">1 Paragraph</option>
-                  <option value="2">2 Paragraphs</option>
-                  <option value="3">3 Paragraphs</option>
-                </select>
-              </div>
+              
             </div>
 
             <div>
@@ -267,11 +264,32 @@ function GenerateDescription() {
                 )}
               </div>
             </div>
-            <p className="text-gray-400 whitespace-pre-wrap">
-              {typeof generatedDescription === "string"
-                ? generatedDescription
-                : "Your generated product description will appear here..."}
-            </p>
+            <div className="space-y-4">
+              {descriptionData ? (
+                <div className="prose prose-gray dark:prose-invert max-w-none space-y-6">
+                  <div className="border-b border-border pb-4">
+                    <h3 className="font-bold text-xl mb-2">Title</h3>
+                    <p className="text-foreground">{descriptionData.title}</p>
+                  </div>
+                  
+                  <div className="border-b border-border pb-4">
+                    <h3 className="font-bold text-xl mb-2">Short Description</h3>
+                    <p className="text-foreground">{descriptionData.short_description}</p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-bold text-xl mb-2">Content</h3>
+                    <p className="text-foreground whitespace-pre-wrap leading-relaxed">
+                      {descriptionData.content}
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-gray-400">
+                  Your generated product description will appear here...
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </main>
