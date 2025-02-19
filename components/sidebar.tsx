@@ -42,22 +42,25 @@ function NavItem({ icon: Icon, label, isActive, isCollapsible, children, badge, 
     }
   }
 
-
   const content = (
     <Button
       variant="ghost"
-      className={cn("w-full", isCollapsible ? "justify-between" : "justify-start", isActive && "bg-accent")}
+      className={cn(
+        "w-full transition-all duration-200",
+        isCollapsible ? "justify-between" : "justify-start",
+        isActive && "bg-accent"
+      )}
       onClick={handleClick}
     >
-      <div className="flex items-center">
-        <Icon className="h-4 w-4" />
-        {!isCollapsed && <span className="ml-2">{label}</span>}
+      <div className="flex items-center min-w-0">
+        <Icon className="h-4 w-4 flex-shrink-0" />
+        {!isCollapsed && <span className="ml-2 truncate">{label}</span>}
       </div>
       {isCollapsible && !isCollapsed && (
-        <ChevronDown className={cn("h-4 w-4 transition-transform", isOpen && "rotate-180")} />
+        <ChevronDown className={cn("h-4 w-4 flex-shrink-0 transition-transform", isOpen && "rotate-180")} />
       )}
       {badge && !isCollapsed && (
-        <span className="ml-auto flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs text-destructive-foreground">
+        <span className="ml-auto flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-destructive text-xs text-destructive-foreground">
           {badge}
         </span>
       )}
@@ -107,11 +110,11 @@ export function Sidebar() {
   return (
     <div
       className={cn(
-        " flex h-screen border-r sticky top-0 bg-background transition-all duration-300",
+        "flex h-screen border-r sticky top-0 bg-background transition-all duration-300",
         isCollapsed ? "w-16" : "w-64",
       )}
     >
-      <div className="flex w-full flex-col items-center">
+      <div className="flex w-full flex-col overflow-hidden">
         <div className={cn("p-4 flex justify-between items-center", isCollapsed && "flex-col items-center")}>
           <div className="flex items-center gap-2 pr-2 mb-2 ">
             <Box className="h-6 w-6" />
@@ -127,47 +130,60 @@ export function Sidebar() {
           </Button>
         </div>
 
-        <div className="flex-1 space-y-4 overflow-auto p-4 custom-scrollbar">
-          {!isCollapsed && <div className="text-sm text-muted-foreground">RetailTech</div>}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 custom-scrollbar">
+          {!isCollapsed && <div className="text-sm text-muted-foreground mb-4">RetailTech</div>}
 
-          <div className="space-y-1">
-            {!isCollapsed && <div className="text-sm font-medium">REPORTING</div>}
-            <NavItem icon={BarChart3} label="Dashboard" isCollapsible={!isCollapsed} isCollapsed={isCollapsed} onExpand={handleExpand}>
+          <div className="space-y-1 py-2">
+            {!isCollapsed && <div className="text-sm font-medium mb-2">Product Catalogue Maintenance</div>}
+            <NavItem 
+              icon={BarChart3} 
+              label="Dashboard" 
+              isCollapsible={!isCollapsed} 
+              isCollapsed={isCollapsed} 
+              onExpand={handleExpand}
+            >
               <div className="space-y-1 py-1">
-              <Button variant="ghost" className="w-full justify-start" onClick={() => router.push("/dashboard")}>
-                  Description Generator
-                </Button>
-                <Button variant="ghost" className="w-full justify-start" onClick={() => router.push("/stats")}>
-                  Stats
-                </Button>
-                <Button variant="ghost" className="w-full justify-start">
-                  Revenue Table
-                </Button>
-                <Button variant="ghost" className="w-full justify-start">
-                  Sales Volume
-                </Button>
-                <Button variant="ghost" className="w-full justify-start">
-                  Category Profit
-                </Button>
+                <div className="max-w-full overflow-hidden">
+                  {[
+                    { path: "/dashboard", label: "Product Description Generator" },
+                    { path: "#", label: "Product Attributes Generator" },
+                    { path: "#", label: "Translation & Localization" },
+                    { path: "#", label: "Content Moderation" },
+                    { path: "#", label: "Product Quality Inspection" },
+                    { path: "#", label: "Product Image Enhancer" },
+                    { path: "#", label: "Compliance Validator" },
+                    { path: "#", label: "Generate Product Video" },
+                  ].map((item, index) => (
+                    <Button
+                      key={index}
+                      variant="ghost"
+                      className="w-full justify-start text-sm py-1 px-2 h-auto whitespace-normal text-left"
+                      onClick={() => router.push(item.path)}
+                    >
+                      {item.label}
+                    </Button>
+                  ))}
+                </div>
               </div>
             </NavItem>
+            <NavItem icon={Package} label="Product Attributes Generator" isCollapsed={isCollapsed} onExpand={handleExpand} />
           </div>
 
-          <div className="space-y-1">
+          <div className="space-y-1 py-3">
             {!isCollapsed && <div className="text-sm font-medium">PRODUCT HIERARCHY</div>}
             <NavItem icon={Package} label="Products" isCollapsed={isCollapsed} onExpand={handleExpand} />
             <NavItem icon={Grid} label="Subcategories" isCollapsed={isCollapsed} onExpand={handleExpand} />
             <NavItem icon={LayoutGrid} label="Categories" isCollapsed={isCollapsed} onExpand={handleExpand} />
           </div>
 
-          <div className="space-y-1">
+          <div className="space-y- py-3">
             {!isCollapsed && <div className="text-sm font-medium">MANAGEMENT</div>}
             <NavItem icon={Mail} label="Invoices" isCollapsed={isCollapsed} onExpand={handleExpand} />
             <NavItem icon={Users} label="Team" isCollapsed={isCollapsed} onExpand={handleExpand} />
           </div>
         </div>
 
-        <div className="border-t p-4">
+        <div className="border-t p-4 mt-auto">
           <div className="space-y-1">
             <NavItem icon={Bell} label="Notifications" badge={3} isCollapsed={isCollapsed} onExpand={handleExpand} />
             <NavItem icon={Settings} label="Settings" isCollapsed={isCollapsed} onExpand={handleExpand} />

@@ -55,7 +55,7 @@ function GenerateDescription() {
       formData.append("paragraphs", paragraphs);
       formData.append("style", style);
       formData.append("tone", tone);
-      formData.append("features", features);
+      formData.append("features", "Give me discription for this product");
 
       const response = await axios.post(
         "/api/generate-description/user123",
@@ -71,7 +71,7 @@ function GenerateDescription() {
         setDescriptionData(responseData);
         // Format the text for copy/export functionality
         setGeneratedDescription(
-          `Title:\n${responseData.title}\n\nShort Description:\n${responseData.short_description}\n\nContent:\n${responseData.content}`
+          `Title:\n${responseData.title}\n\nShort Description:\n${responseData.short_description}\n\nKey Features:\n${responseData.content}`
         );
       } else {
         console.error("Invalid response format");
@@ -110,7 +110,7 @@ function GenerateDescription() {
       <header className="bg-card border-b border-border">
         <div className="max-w-6xl mx-auto px-4 py-6">
           <h1 className="text-3xl font-bold text-foreground">
-            Product Description Generator
+          Product Catalogue Maintenance
           </h1>
           <p className="mt-2 text-muted-foreground">
             Create compelling product descriptions in seconds
@@ -278,7 +278,7 @@ function GenerateDescription() {
                   </div>
                   
                   <div>
-                    <h3 className="font-bold text-xl mb-2">Content</h3>
+                    <h3 className="font-bold text-xl mb-2">Additional Details</h3>
                     <p className="text-foreground whitespace-pre-wrap leading-relaxed">
                       {descriptionData.content}
                     </p>

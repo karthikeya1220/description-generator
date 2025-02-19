@@ -23,7 +23,7 @@ export default function RootLayout({
           <FontProvider>
             <div className="bg-background min-h-screen">
               <div className="flex">
-                <Sidebar />
+                {/* <Sidebar /> */}
                 <div className="flex flex-col w-full">
                   {children}
                 </div>
