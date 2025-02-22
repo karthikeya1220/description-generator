@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Image from "next/image"
 import {
   BarChart3,
   Box,
@@ -22,6 +23,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import Link from "next/link"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { useRouter } from "next/navigation";
+import image from '../public/assets/1.png'
 interface NavItemProps {
   icon: React.ElementType
   label: string
@@ -116,9 +118,29 @@ export function Sidebar() {
     >
       <div className="flex w-full flex-col overflow-hidden">
         <div className={cn("p-4 flex justify-between items-center", isCollapsed && "flex-col items-center")}>
-          <div className="flex items-center gap-2 pr-2 mb-2 ">
-            <Box className="h-6 w-6" />
-            {!isCollapsed && <span className="font-semibold">PRODUCTBASE</span>}
+          <div className="flex items-center gap-2 pr-2 mb-2">
+            <div className="relative">
+              {isCollapsed ? (
+                <Image
+                  src='/assets/1.png'
+                  alt="Logo"
+                  width={30}
+                  height={10}
+                  className="object-contain"
+                  priority
+                />
+              ) : (
+                <Image
+                  src="/assets/2.png"
+                  alt="Logo2"
+                  width={60}
+                  height={40}
+                  className="object-contain"
+                  priority
+                />
+              )}
+            </div>
+            {!isCollapsed && <span className="font-semibold">QUANTA</span>}
           </div>
           <Button
             variant="ghost"
