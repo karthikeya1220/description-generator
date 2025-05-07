@@ -1,14 +1,12 @@
 "use client";
 
   import { useEffect, useState } from "react";
-  import { useTheme } from "next-themes";
   import { useFont } from "@/contexts/FontContext";
   import { Stars, ArrowUp, ArrowDown } from "lucide-react";
   import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import axios from "axios";
 
   export default function StatsPage() {
-    const { theme, setTheme, resolvedTheme } = useTheme();
     const { font } = useFont();
     const [mounted, setMounted] = useState(false);
     const [stats, setStats] = useState({ totalHits: 0, successfulHits: 0, failedHits: 0 });

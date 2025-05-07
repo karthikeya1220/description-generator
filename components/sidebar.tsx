@@ -4,10 +4,7 @@ import * as React from "react"
 import Image from "next/image"
 import {
   BarChart3,
-  Box,
   ChevronDown,
-  ChevronLeft,
-  ChevronRight,
   Grid,
   LayoutGrid,
   Mail,
@@ -23,7 +20,6 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import Link from "next/link"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { useRouter } from "next/navigation";
-import image from '../public/assets/1.png'
 interface NavItemProps {
   icon: React.ElementType
   label: string

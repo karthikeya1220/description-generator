@@ -2,8 +2,8 @@
 import React, { useState, useRef } from "react";
 import { Wand2, RefreshCw, Copy, Upload, X, Download } from "lucide-react";
 import axios from "axios";
-import { useTheme } from "next-themes";
 import { useFont } from "@/contexts/FontContext";
+import Image from "next/image"; // Add this import
 
 // First, update the interface to match the response structure
 interface DescriptionResponse {
@@ -13,12 +13,11 @@ interface DescriptionResponse {
 }
 
 function GenerateDescription() {
-  const { theme } = useTheme();
   const { font } = useFont();
   const [image, setImage] = useState<File | null>(null);
   const [features, setFeatures] = useState("");
   const [tone, setTone] = useState("professional");
-  const [paragraphs, setParagraphs] = useState("1");
+  const [paragraphs] = useState("1");
   const [style, setStyle] = useState("concise");
   const [generatedDescription, setGeneratedDescription] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -57,10 +56,21 @@ function GenerateDescription() {
       formData.append("tone", tone);
       formData.append("features", "Give me discription for this product");
 
-      const response = await axios.post(
-        "/api/generate-description/user123",
-        formData
-      );
+      console.log("Preparing to send request...");
+      
+      // Try the API endpoint without the user ID in the path
+      const apiUrl = "https://description-generator-backend-production.up.railway.app/api/generate-description/user123";
+      
+      console.log("Sending request to:", apiUrl);
+      
+      const response = await axios.post(apiUrl, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        timeout: 30000, // 30 seconds timeout
+      });
+
+      console.log("Response received:", response);
 
       // Parse the response data
       const responseData = typeof response.data === 'string' 
@@ -127,15 +137,18 @@ function GenerateDescription() {
               </label>
               <div className="relative">
                 {image ? (
-                  <div className="relative">
-                    <img
+                  <div className="relative w-full h-48">
+                    <Image
                       src={URL.createObjectURL(image)}
                       alt="Product"
-                      className="w-full h-48 object-cover rounded-lg"
+                      className="rounded-lg"
+                      fill
+                      style={{ objectFit: 'cover' }}
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
                     <button
                       onClick={removeImage}
-                      className="absolute top-2 right-2 p-1 bg-background rounded-full shadow-md hover:bg-accent"
+                      className="absolute top-2 right-2 p-1 bg-background rounded-full shadow-md hover:bg-accent z-10"
                     >
                       <X className="w-5 h-5 text-gray-600" />
                     </button>
